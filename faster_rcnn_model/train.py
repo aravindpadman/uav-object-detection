@@ -40,7 +40,7 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, wr
     
     i = 0
     for images, targets in metric_logger.log_every(data_loader, print_freq, header):
-        if i == 1: break
+        #if i == 1: break
         images = list(image.to(device) for image in images)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
@@ -151,11 +151,11 @@ def main(cfg):
 
     # define training and validation data loaders
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=cfg.TRAIN.BATCH_SIZE, shuffle=True, num_workers=4,
+        dataset, batch_size=cfg.TRAIN.BATCH_SIZE, shuffle=True, num_workers=cfg.TRAIN.NUM_WORKERS, pin_memory=cfg.TRAIN.PIN_MEMORY,
         collate_fn=dataset.collate_fn)
 
     data_loader_test = torch.utils.data.DataLoader(
-        dataset_test, batch_size=cfg.TEST.BATCH_SIZE, shuffle=False, num_workers=4,
+        dataset_test, batch_size=cfg.TEST.BATCH_SIZE, shuffle=False, num_workers=cfg.TEST.NUM_WORKERS, pin_memory=cfg.TEST.PIN_MEMORY,
         collate_fn=dataset_test.collate_fn)
 
     # TODO add tensorboard writer
@@ -174,16 +174,13 @@ def main(cfg):
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(params, lr=3e-4)
                            
-    # let's train it for 10 epochs
-    num_epochs = 1
-
-    for epoch in range(num_epochs):
+    for epoch in range(cfg.NUM_EPOCHS):
         # train for one epoch, printing every 10 iterations
         train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10, writer=writer)
         # update the learning rate
         #lr_scheduler.step()
         # evaluate on the test dataset
-        #evaluate(model, data_loader_test, device=device, writer=writer)
+        evaluate(model, data_loader_test, device=device, writer=writer)
         # TODO add model checkpoint logic here
         if cfg.SAVE_CHECKPOINT:
             save_checkpoint(model, optimizer, epoch, cfg, scaler=None)

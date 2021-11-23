@@ -1,21 +1,27 @@
-"""config file"""
+"""
+config file
+"""
 
 class Config:
-    OUTPUT_DIR = "/home/welcome/uav-object-detection/outputs/exp-2"
-    DATA_DIR = '/home/welcome/uav-object-detection/data'
+    OUTPUT_DIR = "/workspace/data/outputs/exp-1"
+    DATA_DIR = '/workspace/data/visdrone-object-detection-dataset'
     NUM_CLASSES = 12
-    SAVE_CHECKPOINT = False
+    NUM_EPOCHS = 50
+    SAVE_CHECKPOINT = True
 
     class TRAIN:
-        BATCH_SIZE = 8
+        BATCH_SIZE = 16
+        NUM_WORKERS = 2
+        PIN_MEMORY = True
 
     class TEST:
         BATCH_SIZE = 1
         CHECKPOINT_FILE_PATH = ""
-        #CHECKPOINT_FILE_PATH = "/home/welcome/uav-object-detection/outputs/exp-1/checkpoints/checkpoint_epoch_00003.pyth"
+        NUM_WORKERS = 4
+        PIN_MEMORY = True
 
     class TENSORBOARD:
-        VISUALIZE = False
+        VISUALIZE = True
         LOG_DIR = ""
 
 cfg = Config()
