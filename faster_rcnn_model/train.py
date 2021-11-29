@@ -8,7 +8,6 @@ from coco_eval import CocoEvaluator
 from coco_utils import get_coco_api_from_dataset
 from dataloader import DetectionDataset
 
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from faster_rcnn import fasterrcnn_resnet50_fpn
 from checkpoint import save_checkpoint
 import tensorboard_util as tb
