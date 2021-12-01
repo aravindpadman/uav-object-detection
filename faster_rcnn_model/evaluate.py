@@ -33,8 +33,9 @@ model = get_faster_rcnn_model(pretrained=False)
 model.to(device)
 model.eval()
 
-dataset_test = DetectionDataset(cfg.DATA_DIR, 'val', transforms=get_transform(False))
+dataset_test = DetectionDataset(cfg.DATA_DIR, 'test', transforms=get_transform(False))
 
+cfg.TEST.BATCH_SIZE = 16
 data_loader = torch.utils.data.DataLoader(                      
          dataset_test, batch_size=cfg.TEST.BATCH_SIZE, shuffle=False, num_workers=4,
          collate_fn=dataset_test.collate_fn)
